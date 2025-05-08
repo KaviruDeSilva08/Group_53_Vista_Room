@@ -1,6 +1,6 @@
 # VistaRoom - Interior Design Visualization Tool
 
-![VistaRoom Logo]() <!-- Replace with actual logo -->
+![VistaRoom Logo](https://github.com/KaviruDeSilva08/Group_53_Vista_Room/blob/main/public/Vista_Room_2.png) <!-- Replace with actual logo -->
 
 VistaRoom is a web-based tool designed to simplify and enhance the process of visualizing interior design layouts. It provides homeowners and interior designers with real-time 2D and 3D views to experiment with room configurations and furniture arrangements before making physical changes or purchases.
 
