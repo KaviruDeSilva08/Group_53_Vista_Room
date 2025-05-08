@@ -87,7 +87,7 @@ const DesignCanvas2D: React.FC = () => {
         const itemWidth = item.width * scale * item.scale;
         const itemDepth = item.depth * scale * item.scale;
         
-        // Simple bounding box check (not accounting for rotation)
+        
         return (
           x >= itemX && 
           x <= itemX + itemWidth && 
