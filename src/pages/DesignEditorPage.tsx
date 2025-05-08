@@ -34,7 +34,13 @@ const DesignEditorPage: React.FC = () => {
           
           <main className="flex-1 overflow-hidden p-4">
             <div className="h-full rounded-lg overflow-hidden flex items-center justify-center">
-              {viewMode.mode === '2d' ? <DesignCanvas2D /> : <DesignCanvas3D />}
+              {viewMode.mode === '2d' ? (
+                <DesignCanvas2D />
+              ) : (
+                <div className="flex items-center justify-center w-full h-full">
+                  <DesignCanvas3D />
+                </div>
+              )}
             </div>
           </main>
         </div>

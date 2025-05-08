@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Header from '../components/common/Header';
 import { useAuthStore } from '../store/authStore';
 import { useDesignStore } from '../store/designStore';
-import { PlusCircle, FolderPlus } from 'lucide-react';
+import { PlusCircle, FolderPlus, Home } from 'lucide-react';
 
 const DashboardPage: React.FC = () => {
   const { designer } = useAuthStore();
@@ -59,6 +59,48 @@ const DashboardPage: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
+      {/* Duplicated Welcome and Summary Cards Section */}
+      <section className="py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h1 className="text-4xl font-bold text-gray-900 mb-2">
+          Welcome back, {designer?.name || 'Designer'}
+        </h1>
+
+          <p className="text-lg text-gray-500 mb-8">Manage your rooms and designs</p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* Total Rooms Card */}
+            <div className="bg-white rounded-xl shadow p-6 flex items-center space-x-4">
+              <div className="bg-blue-50 p-3 rounded-full">
+                <Home className="h-8 w-8 text-blue-400" />
+              </div>
+              <div>
+                <div className="text-gray-500 text-sm font-medium">Total Rooms</div>
+                <div className="text-2xl font-bold text-gray-900">{rooms.length}</div>
+              </div>
+            </div>
+            {/* Total Designs Card */}
+            <div className="bg-white rounded-xl shadow p-6 flex items-center space-x-4">
+              <div className="bg-green-50 p-3 rounded-full">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-green-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 20h9" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16.5 3.5a2.121 2.121 0 113 3L7 19.5 3 21l1.5-4L16.5 3.5z" /></svg>
+              </div>
+              <div>
+                <div className="text-gray-500 text-sm font-medium">Total Designs</div>
+                <div className="text-2xl font-bold text-gray-900">{designs.length}</div>
+              </div>
+            </div>
+            {/* Recent Activity Card */}
+            <div className="bg-white rounded-xl shadow p-6 flex items-center space-x-4">
+              <div className="bg-yellow-50 p-3 rounded-full">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3" /><circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth={2} fill="none" /></svg>
+              </div>
+              <div>
+                <div className="text-gray-500 text-sm font-medium">Recent Activity</div>
+                <div className="text-2xl font-bold text-gray-900">None</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
       
       <main className="py-6">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -167,7 +209,7 @@ const DashboardPage: React.FC = () => {
                               {room.name}
                             </p>
                             <p className="text-sm text-gray-500">
-                              {room.width} × {room.length} × {room.height} cm
+                              {room.width} × {room.length} × {room.height} inches
                             </p>
                           </div>
                           <div>
