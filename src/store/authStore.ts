@@ -1,8 +1,9 @@
+// src/store/authStore.ts
 import { create } from 'zustand';
 import { signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { auth } from '../../firebaseConfig';
 import { getDoc, doc } from 'firebase/firestore';
-import { db } from '../../firebaseConfig'; 
+import { db } from '../../firebaseConfig'; // Ensure you export Firestore instance from firebase.ts
 import { AuthState, Designer } from '../types';
 
 export const useAuthStore = create<AuthState & {
@@ -26,7 +27,7 @@ export const useAuthStore = create<AuthState & {
       set({
         designer: {
           id: user.uid,
-          name: userName, 
+          name: userName, // Use Firestore value
           email: user.email || '',
         } as Designer,
         isAuthenticated: true,

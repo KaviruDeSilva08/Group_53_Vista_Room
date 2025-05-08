@@ -12,9 +12,9 @@ const RoomConfigForm: React.FC<RoomConfigFormProps> = ({ onComplete }) => {
   
   const [formData, setFormData] = useState<Omit<Room, 'id'>>({
     name: '',
-    width: 500,
-    length: 400,
-    height: 280,
+    width: 200, // Default width in inches
+    length: 160, // Default length in inches
+    height: 96, // Default height in inches
     shape: 'rectangular',
     colorScheme: {
       walls: '#f5f5f5',
@@ -101,15 +101,15 @@ const RoomConfigForm: React.FC<RoomConfigFormProps> = ({ onComplete }) => {
           
           <div>
             <label htmlFor="width" className="block text-sm font-medium text-gray-700">
-              Width (cm)
+              Width (inches)
             </label>
             <input
               type="number"
               name="width"
               id="width"
               required
-              min="100"
-              max="2000"
+              min="36"
+              max="480"
               value={formData.width}
               onChange={handleChange}
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
@@ -118,15 +118,15 @@ const RoomConfigForm: React.FC<RoomConfigFormProps> = ({ onComplete }) => {
           
           <div>
             <label htmlFor="length" className="block text-sm font-medium text-gray-700">
-              Length (cm)
+              Length (inches)
             </label>
             <input
               type="number"
               name="length"
               id="length"
               required
-              min="100"
-              max="2000"
+              min="36"
+              max="480"
               value={formData.length}
               onChange={handleChange}
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
@@ -135,15 +135,15 @@ const RoomConfigForm: React.FC<RoomConfigFormProps> = ({ onComplete }) => {
           
           <div>
             <label htmlFor="height" className="block text-sm font-medium text-gray-700">
-              Height (cm)
+              Height (inches)
             </label>
             <input
               type="number"
               name="height"
               id="height"
               required
-              min="100"
-              max="500"
+              min="72"
+              max="144"
               value={formData.height}
               onChange={handleChange}
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"

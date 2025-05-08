@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useDesignStore } from '../../store/designStore';
-import { Eye, Save, Trash2, Palette, Maximize, Minimize, Download } from 'lucide-react';
-import { toPng } from 'html-to-image';
+import { Eye, Save, Trash2, Palette, Maximize, Minimize, Download, RotateCcw, RotateCw } from 'lucide-react';
+import { toPng, toJpeg } from 'html-to-image';
 
 const DesignControls: React.FC = () => {
   const { 
@@ -12,6 +12,8 @@ const DesignControls: React.FC = () => {
     updateFurniture,
     removeFurniture
   } = useDesignStore();
+  
+  const [showDownloadOptions, setShowDownloadOptions] = useState(false);
   
   const selectedItem = currentDesign?.furniture.find(item => item.selected);
   
@@ -39,19 +41,45 @@ const DesignControls: React.FC = () => {
     }
   };
 
-  const handleDownloadImage = async () => {
+  const handleRotateLeft = () => {
+    if (selectedItem) {
+      const newRotation = {
+        ...selectedItem.rotation,
+        y: selectedItem.rotation.y - Math.PI / 4 // Rotate 45 degrees left
+      };
+      updateFurniture(selectedItem.id, { rotation: newRotation });
+    }
+  };
+
+  const handleRotateRight = () => {
+    if (selectedItem) {
+      const newRotation = {
+        ...selectedItem.rotation,
+        y: selectedItem.rotation.y + Math.PI / 4 // Rotate 45 degrees right
+      };
+      updateFurniture(selectedItem.id, { rotation: newRotation });
+    }
+  };
+
+  const handleDownloadImage = async (format: 'png' | 'jpg') => {
     const element = document.querySelector('.design-canvas-container');
     if (!element || !currentDesign) return;
 
     try {
-      const dataUrl = await toPng(element, {
-        backgroundColor: '#f9fafb',
-        quality: 1.0,
-        pixelRatio: 2,
-      });
+      const dataUrl = format === 'png' 
+        ? await toPng(element, {
+            backgroundColor: '#f9fafb',
+            quality: 1.0,
+            pixelRatio: 2,
+          })
+        : await toJpeg(element, {
+            backgroundColor: '#f9fafb',
+            quality: 0.95,
+            pixelRatio: 2,
+          });
       
       const link = document.createElement('a');
-      link.download = `${currentDesign.name}-${viewMode.mode}-view.png`;
+      link.download = `${currentDesign.name}-${viewMode.mode}-view.${format}`;
       link.href = dataUrl;
       link.click();
     } catch (err) {
@@ -78,59 +106,96 @@ const DesignControls: React.FC = () => {
           Save Design
         </button>
 
-        <button
-          onClick={handleDownloadImage}
-          className="inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md text-purple-700 bg-purple-100 hover:bg-purple-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
-        >
-          <Download className="mr-1.5 h-4 w-4" />
-          Download {viewMode.mode.toUpperCase()} View
-        </button>
+        <div className="relative">
+          <button
+            onClick={() => setShowDownloadOptions(!showDownloadOptions)}
+            className="inline-flex items-center px-3 py-1.5 border border-transparent text-sm font-medium rounded-md text-purple-700 bg-purple-100 hover:bg-purple-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+          >
+            <Download className="mr-1.5 h-4 w-4" />
+            Download {viewMode.mode.toUpperCase()} View
+          </button>
+          
+          {showDownloadOptions && (
+            <div className="absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
+              <div className="py-1" role="menu" aria-orientation="vertical">
+                <button
+                  onClick={() => {
+                    handleDownloadImage('png');
+                    setShowDownloadOptions(false);
+                  }}
+                  className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  role="menuitem"
+                >
+                  Download as PNG
+                </button>
+                <button
+                  onClick={() => {
+                    handleDownloadImage('jpg');
+                    setShowDownloadOptions(false);
+                  }}
+                  className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  role="menuitem"
+                >
+                  Download as JPG
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
       
       {selectedItem && (
         <div className="flex items-center space-x-4 mt-2 sm:mt-0">
-          <div className="flex items-center">
-            <span className="text-xs text-gray-500 mr-2">Color</span>
-            <div className="flex rounded-md shadow-sm">
-              <input
-                type="color"
-                value={selectedItem.color}
-                onChange={handleColorChange}
-                className="h-8 w-8 rounded cursor-pointer"
-                title="Change color"
-              />
-            </div>
+          <div className="flex items-center space-x-2">
+            <label className="text-sm text-gray-600">Color:</label>
+            <input
+              type="color"
+              value={selectedItem.color}
+              onChange={handleColorChange}
+              className="h-8 w-8 rounded cursor-pointer"
+            />
           </div>
           
-          <div className="flex items-center">
-            <span className="text-xs text-gray-500 mr-2">Scale</span>
-            <div className="flex items-center">
-              <button
-                onClick={handleScaleDecrease}
-                className="p-1 rounded-full hover:bg-gray-100"
-                title="Decrease size"
-              >
-                <Minimize className="h-4 w-4 text-gray-700" />
-              </button>
-              <span className="mx-1 text-sm">
-                {selectedItem.scale.toFixed(1)}
-              </span>
-              <button
-                onClick={handleScaleIncrease}
-                className="p-1 rounded-full hover:bg-gray-100"
-                title="Increase size"
-              >
-                <Maximize className="h-4 w-4 text-gray-700" />
-              </button>
-            </div>
+          <div className="flex items-center space-x-2">
+            <button
+              onClick={handleScaleDecrease}
+              className="p-1 rounded-md hover:bg-gray-100"
+            >
+              <Minimize className="h-4 w-4 text-gray-600" />
+            </button>
+            <span className="text-sm text-gray-600">Scale</span>
+            <button
+              onClick={handleScaleIncrease}
+              className="p-1 rounded-md hover:bg-gray-100"
+            >
+              <Maximize className="h-4 w-4 text-gray-600" />
+            </button>
+          </div>
+
+          <div className="flex items-center space-x-2">
+            <button
+              onClick={handleRotateLeft}
+              className="p-1 rounded-md hover:bg-gray-100"
+              title="Rotate Left"
+            >
+              <RotateCcw className="h-4 w-4 text-gray-600" />
+            </button>
+            <span className="text-sm text-gray-600">Rotate</span>
+            <button
+              onClick={handleRotateRight}
+              className="p-1 rounded-md hover:bg-gray-100"
+              title="Rotate Right"
+            >
+              <RotateCw className="h-4 w-4 text-gray-600" />
+            </button>
           </div>
           
           <button
             onClick={handleDeleteItem}
-            className="p-1 rounded-full hover:bg-red-100 text-red-600"
-            title="Delete item"
+            className="inline-flex items-center px-2 py-1 border border-transparent text-sm font-medium rounded-md text-red-700 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
           >
-            <Trash2 className="h-5 w-5" />
+            <Trash2 className="h-4 w-4 mr-1" />
+            Delete
           </button>
         </div>
       )}
