@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../store/authStore';
-import { Layout, User, Lock } from 'lucide-react';
+import { User, Lock } from 'lucide-react';
+import Logo from '../common/Logo';
 
 const LoginForm: React.FC = () => {
   const [username, setUsername] = useState('');
@@ -34,15 +35,12 @@ const LoginForm: React.FC = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
-        <div>
-          <div className="flex justify-center">
-            <Layout className="h-16 w-16 text-indigo-600" />
+        <div className="mb-12">
+          <div className="flex justify-center mb-8">
+            <Logo size="lg" className="text-indigo-600" />
           </div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            FurnishVision
-          </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
-            Sign in to access the design system
+          <p className="text-center text-sm text-gray-600">
+            Login to access the design system
           </p>
         </div>
         
@@ -53,13 +51,13 @@ const LoginForm: React.FC = () => {
                 <User className="h-5 w-5 text-gray-400" />
               </div>
               <input
-                id="username"
-                name="username"
-                type="text"
-                autoComplete="username"
-                required
+                id="email"
+                name="email"
+                type="email"
+                autoComplete="email"
+                required              
                 className="appearance-none rounded-none relative block w-full pl-10 pr-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
-                placeholder="Username"
+                placeholder="Email"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
               />
@@ -100,14 +98,14 @@ const LoginForm: React.FC = () => {
                 isLoading ? 'opacity-70 cursor-not-allowed' : ''
               }`}
             >
-              {isLoading ? 'Signing in...' : 'Sign in'}
+              {isLoading ? 'Loging...' : 'Login'}
             </button>
           </div>
           
           <div className="text-sm text-center">
-            <p className="text-gray-600">
+            {/* <p className="text-gray-600">
               Demo credentials: sarah.designer / FurnishPro2025!
-            </p>
+            </p> */}
           </div>
         </form>
       </div>
